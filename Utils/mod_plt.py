@@ -35,3 +35,14 @@ def dataframe_plot(df,fsize):
     f.set_size_inches(fsize)
     
 
+
+# In[1]:
+
+def frmt_plot(ttl='',xl='',yl='',fd='',fsize=14):
+    plt.title(ttl,fontdict=fd)
+    plt.xlabel(xl,fontdict=fd)
+    plt.ylabel(yl,fontdict=fd)
+    plt.legend(fontsize=fsize)
+    plt.xticks(fontsize=fsize)
+    plt.yticks(fontsize=fsize)
+

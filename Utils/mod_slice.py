@@ -37,7 +37,7 @@ def drp_rows(df,rows): #Drops a row
 
 # In[7]:
 
-def get_raw_data(fname,rst_col_idx=True,rst_row_idx=False,sht=0):
+def get_raw_data(fname,rst_col_idx=False,rst_row_idx=False,sht=0):
     f,fext = os.path.splitext(fname)
     
     if fext in ['.csv']:
@@ -67,11 +67,14 @@ def conv_colidx_datetime(df,frmt): #Returns list containing datetime values wher
     df.columns = col_dt    
 
 
-# In[5]:
+# In[2]:
 
 #Convert column to datetime
-def conv_str_to_datetime(df,col):
-    df[col]=df[col].map(lambda x:pd.to_datetime(x) if isinstance(x,str) else x)
+def conv_str_to_datetime(df,col,str_col=True):
+    if(str_col):
+        df[col]=pd.to_datetime(df[col])
+    else:
+        df[col]=df[col].map(lambda x:pd.to_datetime(x) if isinstance(x,str) else x)
     
 
 
