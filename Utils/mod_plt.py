@@ -1,13 +1,23 @@
 
 # coding: utf-8
 
-# In[21]:
+# In[6]:
 
 import matplotlib.pyplot as plt
 import mod_fitting
 
 
-# In[22]:
+# In[7]:
+
+# Defaults for plots
+font_title_label = {'family': 'arial',
+        'color':  'black',
+        'weight': 'bold',
+        'size': 16,
+        }
+
+
+# In[8]:
 
 def curve_fitplot(*fitparam,xv,yv,lbl):
     plt.figure(figsize=(15,7))
@@ -17,7 +27,7 @@ def curve_fitplot(*fitparam,xv,yv,lbl):
     plt.grid()
 
 
-# In[19]:
+# In[9]:
 
 def single_xy_plot(data_x,data_y,leg_lbl,fsize):
     fig, ax = plt.subplots(figsize=fsize)
@@ -27,7 +37,7 @@ def single_xy_plot(data_x,data_y,leg_lbl,fsize):
     
 
 
-# In[5]:
+# In[10]:
 
 def dataframe_plot(df,fsize):
     ax = df.plot(grid=True)
@@ -36,9 +46,9 @@ def dataframe_plot(df,fsize):
     
 
 
-# In[1]:
+# In[11]:
 
-def frmt_plot(ttl='',xl='',yl='',fd='',fsize=14):
+def frmt_plot(ttl='',xl='',yl='',fd=font_title_label,fsize=14):
     plt.title(ttl,fontdict=fd)
     plt.xlabel(xl,fontdict=fd)
     plt.ylabel(yl,fontdict=fd)

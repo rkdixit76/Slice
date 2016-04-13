@@ -70,12 +70,14 @@ def conv_colidx_datetime(df,frmt): #Returns list containing datetime values wher
 # In[2]:
 
 #Convert column to datetime
-def conv_str_to_datetime(df,col,str_col=True):
+def conv_str_to_datetime(df,col,str_col=True,conv_to_date=False):
     if(str_col):
         df[col]=pd.to_datetime(df[col])
     else:
         df[col]=df[col].map(lambda x:pd.to_datetime(x) if isinstance(x,str) else x)
     
+#     if(conv_to_date):
+#         df[col] = df[col].apply(lambda)
 
 
 # In[6]:
