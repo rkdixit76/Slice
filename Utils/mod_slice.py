@@ -1,7 +1,7 @@
 
 # coding: utf-8
 
-# In[1]:
+# In[2]:
 
 import pandas as pd
 import numpy as np
@@ -35,13 +35,13 @@ def drp_rows(df,rows): #Drops a row
     return(df)
 
 
-# In[7]:
+# In[4]:
 
 def get_raw_data(fname,rst_col_idx=False,rst_row_idx=False,sht=0):
     f,fext = os.path.splitext(fname)
     
     if fext in ['.csv']:
-        df = pd.read_csv(fname)
+        df = pd.read_csv(fname,low_memory=False)
     elif fext in ['.xls','.xlsx']:
         df = pd.read_excel(fname,sheetname=sht)
     
@@ -53,7 +53,7 @@ def get_raw_data(fname,rst_col_idx=False,rst_row_idx=False,sht=0):
     return(df)
 
 
-# In[4]:
+# In[5]:
 
 def conv_colidx_datetime(df,frmt): #Returns list containing datetime values wherever possible
     cols = df.columns.tolist()
@@ -67,7 +67,7 @@ def conv_colidx_datetime(df,frmt): #Returns list containing datetime values wher
     df.columns = col_dt    
 
 
-# In[2]:
+# In[6]:
 
 #Convert column to datetime
 def conv_str_to_datetime(df,col,str_col=True,conv_to_date=False):
@@ -80,7 +80,7 @@ def conv_str_to_datetime(df,col,str_col=True,conv_to_date=False):
 #         df[col] = df[col].apply(lambda)
 
 
-# In[6]:
+# In[7]:
 
 def truncate_timestamp_colidx_todate(df):
     for cl in df.columns:
@@ -89,7 +89,7 @@ def truncate_timestamp_colidx_todate(df):
             df.rename(columns={cl:cl_date},inplace=True)
 
 
-# In[10]:
+# In[8]:
 
 #Parses data from complex column
 def arg_parser(arg,search_str):
@@ -114,4 +114,20 @@ def get_search_cols(data,search_string='',arg_column_name='',ret_cnt=False,to_nu
         sr_col['Count'] = np.ones(len(sr_col))
         
     return(sr_col)
+
+
+# In[12]:
+
+def get_combined_hist_dates(df,dt_colname,dt_range,tgt_colname,grp_colname='user_id',bin_range=np.arange(1,11,1)):
+    
+    b_range_temp = np.append(bin_range,bin_range[len(bin_range)-1]+1)
+    hist_df = pd.DataFrame(np.zeros(len(bin_range)),index=bin_range,columns=['freq'])
+    num_records = (dt_range.max()-dt_range.min()).days+1
+    for for_date in dt_range:
+    
+        hist_freq,bin_edges = np.histogram(df[df[dt_colname]==for_date][[grp_colname,tgt_colname]].                             groupby(grp_colname).sum(),bins=b_range_temp)
+        hist_df['freq'] = hist_df['freq'] + hist_freq
+    hist_df['freq'] = hist_df['freq']/num_records
+
+    return(hist_df)
 

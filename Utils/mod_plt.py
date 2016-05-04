@@ -1,13 +1,13 @@
 
 # coding: utf-8
 
-# In[6]:
+# In[1]:
 
 import matplotlib.pyplot as plt
 import mod_fitting
 
 
-# In[7]:
+# In[2]:
 
 # Defaults for plots
 font_title_label = {'family': 'arial',
@@ -17,7 +17,7 @@ font_title_label = {'family': 'arial',
         }
 
 
-# In[8]:
+# In[1]:
 
 def curve_fitplot(*fitparam,xv,yv,lbl):
     plt.figure(figsize=(15,7))
@@ -27,7 +27,7 @@ def curve_fitplot(*fitparam,xv,yv,lbl):
     plt.grid()
 
 
-# In[9]:
+# In[4]:
 
 def single_xy_plot(data_x,data_y,leg_lbl,fsize):
     fig, ax = plt.subplots(figsize=fsize)
@@ -37,7 +37,7 @@ def single_xy_plot(data_x,data_y,leg_lbl,fsize):
     
 
 
-# In[10]:
+# In[5]:
 
 def dataframe_plot(df,fsize):
     ax = df.plot(grid=True)
@@ -46,7 +46,7 @@ def dataframe_plot(df,fsize):
     
 
 
-# In[11]:
+# In[6]:
 
 def frmt_plot(ttl='',xl='',yl='',fd=font_title_label,fsize=14):
     plt.title(ttl,fontdict=fd)
@@ -55,4 +55,17 @@ def frmt_plot(ttl='',xl='',yl='',fd=font_title_label,fsize=14):
     plt.legend(fontsize=fsize)
     plt.xticks(fontsize=fsize)
     plt.yticks(fontsize=fsize)
+
+
+# In[7]:
+
+def frmt_axis(ax,ttl='',xl='',yl='',fd=font_title_label,fsize=14):
+    ax.set_title(ttl,fontdict=fd)
+    ax.set_xlabel(xl,fontdict=fd)
+    ax.set_ylabel(yl,fontdict=fd)
+    ax.legend(fontsize=fsize)
+    for tick in ax.xaxis.get_major_ticks():
+        tick.label.set_fontsize(fsize)
+    for tick in ax.yaxis.get_major_ticks():
+        tick.label.set_fontsize(fsize)
 
