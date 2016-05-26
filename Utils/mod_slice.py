@@ -1,7 +1,7 @@
 
 # coding: utf-8
 
-# In[2]:
+# In[1]:
 
 import pandas as pd
 import numpy as np
@@ -35,13 +35,13 @@ def drp_rows(df,rows): #Drops a row
     return(df)
 
 
-# In[4]:
+# In[1]:
 
-def get_raw_data(fname,rst_col_idx=False,rst_row_idx=False,sht=0):
+def get_raw_data(fname,rst_col_idx=False,rst_row_idx=False,sht=0,pdate=False):
     f,fext = os.path.splitext(fname)
     
     if fext in ['.csv']:
-        df = pd.read_csv(fname,low_memory=False)
+        df = pd.read_csv(fname,low_memory=False,parse_dates=pdate,infer_datetime_format=True)
     elif fext in ['.xls','.xlsx']:
         df = pd.read_excel(fname,sheetname=sht)
     
@@ -130,4 +130,30 @@ def get_combined_hist_dates(df,dt_colname,dt_range,tgt_colname,grp_colname='user
     hist_df['freq'] = hist_df['freq']/num_records
 
     return(hist_df)
+
+
+# In[ ]:
+
+def cat_df_cols(df,col_list):
+    for col in col_list:
+        df[col] = df[col].astype('category')
+
+
+# In[6]:
+
+def save_to_hdfs(fpath,rst_col_idx=False,rst_row_idx=False,sht=0,pdate=False,append=True):
+    raw_data = get_raw_data(fpath,rst_col_idx=rst_col_idx,rst_row_idx=rst_row_idx,sht=sht,pdate=pdate)
+    hdfs_fp,ext = os.path.splitext(fpath)
+    hdfs_fp = hdfs_fp+'.h5'
+    raw_data.to_hdf(hdfs_fp,'table',append=append)
+    
+
+
+# In[1]:
+
+def str_to_numeric(df,cols,dtp,replace_strs):
+    for col in cols:
+        for s in replace_strs:
+            df[col] = df[col].replace(s,'',regex=True)
+        df[col] = df[col].astype(dtp)
 

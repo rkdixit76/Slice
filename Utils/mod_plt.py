@@ -69,3 +69,22 @@ def frmt_axis(ax,ttl='',xl='',yl='',fd=font_title_label,fsize=14):
     for tick in ax.yaxis.get_major_ticks():
         tick.label.set_fontsize(fsize)
 
+
+# In[6]:
+
+def df_timestamp_todate_plot(df,fsize=(15,7),grid=True,kind='bar',lw=0,alpha=0.7,rot=90):
+    # Plot dataframe that has DateTimeIndex as a timestamp. Convert it to date from timestamp
+    set_xticks=False
+    if (kind=='line'):
+        if(lw==0): #Check line width param
+            lw=2
+        
+        set_xticks=True # Set xticks for line plot
+        
+    ax = df.plot(figsize=fsize,grid=grid,kind=kind,lw=lw,alpha=alpha,rot=rot);
+    if(set_xticks):
+        ax.set_xticks(df.index.date);
+    
+    ax.set_xticklabels(df.index.date);
+    
+
