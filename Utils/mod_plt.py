@@ -88,3 +88,38 @@ def df_timestamp_todate_plot(df,fsize=(15,7),grid=True,kind='bar',lw=0,alpha=0.7
     ax.set_xticklabels(df.index.date);
     
 
+
+# In[1]:
+
+def std_plot(df,figsize=(30,10),pltkind='line',stkd=True,clrs=None,ttl=None,xl=None,yl=None,            conv_xaxis=False,xaxis_frmt='%b-%y',rot=0):
+    if (pltkind=='bar' or pltkind=='barh'):
+        if(clrs):
+            ax=df.plot(kind=pltkind,figsize=figsize,grid=True,lw=0,stacked=stkd,alpha=0.6,color=clrs,legend=True,rot=rot);
+        else:
+            ax=df.plot(kind=pltkind,figsize=figsize,grid=True,lw=0,stacked=stkd,alpha=0.6,legend=True,rot=rot);
+        
+        if(conv_xaxis):
+            ax.set_xticklabels(df.index.strftime(xaxis_frmt));
+   
+    elif pltkind=='line':
+        df.plot(kind=pltkind,figsize=figsize,grid=True,lw=2,rot=rot);
+        
+    frmt_plot(ttl=ttl,xl=xl,yl=yl);
+
+
+# In[6]:
+
+def plt_multiple_df(df_list,legend_list,pltkind='line',figsize=(20,10),location='best',ttl='',xl='',yl=''):
+    # Function to plot multiple dataframes on one axis
+    if(pltkind=='line'):
+        idx=0
+        for df in df_list:
+            if(idx==0): #First plot
+                ax=df.plot(kind=pltkind,figsize=figsize,grid=True,lw=2);
+            else:
+                df.plot(ax=ax,kind=pltkind,figsize=figsize,grid=True,lw=2);
+            idx+=1
+    
+    frmt_axis(ax,ttl=ttl,xl=xl,yl=yl);
+    ax.legend(legend_list,loc=location); #Set the legend
+

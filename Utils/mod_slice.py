@@ -80,6 +80,15 @@ def conv_str_to_datetime(df,col,str_col=True,conv_to_date=False):
 #         df[col] = df[col].apply(lambda)
 
 
+# In[1]:
+
+# Convert columns to datetime
+def conv_cols_datetime(df,d_cols):
+    
+    for col in d_cols:
+        conv_str_to_datetime(df,col)
+
+
 # In[7]:
 
 def truncate_timestamp_colidx_todate(df):
@@ -132,9 +141,14 @@ def get_combined_hist_dates(df,dt_colname,dt_range,tgt_colname,grp_colname='user
     return(hist_df)
 
 
-# In[ ]:
+# In[2]:
 
-def cat_df_cols(df,col_list):
+def cat_df_cols(df,col_list,obj_cols=False):
+    # Converts cols in df to dtype category
+    # If obj_cols == True, then all columns with dtype==object will be set to categories
+    if(obj_cols):
+        col_list = df.dtypes[df.dtypes==object].index
+        
     for col in col_list:
         df[col] = df[col].astype('category')
 
@@ -156,4 +170,39 @@ def str_to_numeric(df,cols,dtp,replace_strs):
         for s in replace_strs:
             df[col] = df[col].replace(s,'',regex=True)
         df[col] = df[col].astype(dtp)
+
+
+# In[1]:
+
+def conv_cols_float(df,non_flt_cols):
+    for col in non_flt_cols:
+        df[col]=df[col].astype('float64')
+
+
+# In[6]:
+
+def frmt_data_dtime_float(df,date_cols,non_float_cols,set_idx=False,set_idx_col=None):
+    if(date_cols):
+        conv_cols_datetime(df,date_cols)
+    if(non_float_cols):
+        conv_cols_float(df,non_float_cols)
+    cat_df_cols(df,'',obj_cols=True)
+    if(set_idx):
+        df.set_index(set_idx_col,drop=True,inplace=True)
+
+
+# In[5]:
+
+def convert_save_df_hdfs(df,dt_cols,non_flt_cols,hdfs_path,set_idx=False,set_idx_colname=None):
+    frmt_data_dtime_float(df,dt_cols,non_flt_cols,set_idx,set_idx_colname)
+    store = pd.HDFStore(hdfs_path,format='table',mode='w')
+    store.append('table',df)
+    store.close()
+
+
+# In[1]:
+
+def get_df_mb(df):
+    # Return size in MB of df in memory
+    return(df.memory_usage().sum()*1e-6)
 
