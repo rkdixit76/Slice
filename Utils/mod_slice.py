@@ -1,7 +1,7 @@
 
 # coding: utf-8
 
-# In[1]:
+# In[2]:
 
 import pandas as pd
 import numpy as np
@@ -35,7 +35,7 @@ def drp_rows(df,rows): #Drops a row
     return(df)
 
 
-# In[1]:
+# In[4]:
 
 def get_raw_data(fname,rst_col_idx=False,rst_row_idx=False,sht=0,pdate=False):
     f,fext = os.path.splitext(fname)
@@ -80,7 +80,7 @@ def conv_str_to_datetime(df,col,str_col=True,conv_to_date=False):
 #         df[col] = df[col].apply(lambda)
 
 
-# In[1]:
+# In[7]:
 
 # Convert columns to datetime
 def conv_cols_datetime(df,d_cols):
@@ -89,7 +89,7 @@ def conv_cols_datetime(df,d_cols):
         conv_str_to_datetime(df,col)
 
 
-# In[7]:
+# In[8]:
 
 def truncate_timestamp_colidx_todate(df):
     for cl in df.columns:
@@ -98,7 +98,7 @@ def truncate_timestamp_colidx_todate(df):
             df.rename(columns={cl:cl_date},inplace=True)
 
 
-# In[8]:
+# In[9]:
 
 #Parses data from complex column
 def arg_parser(arg,search_str):
@@ -125,7 +125,7 @@ def get_search_cols(data,search_string='',arg_column_name='',ret_cnt=False,to_nu
     return(sr_col)
 
 
-# In[12]:
+# In[10]:
 
 def get_combined_hist_dates(df,dt_colname,dt_range,tgt_colname,grp_colname='user_id',bin_range=np.arange(1,11,1)):
     
@@ -141,7 +141,7 @@ def get_combined_hist_dates(df,dt_colname,dt_range,tgt_colname,grp_colname='user
     return(hist_df)
 
 
-# In[2]:
+# In[11]:
 
 def cat_df_cols(df,col_list,obj_cols=False):
     # Converts cols in df to dtype category
@@ -153,7 +153,7 @@ def cat_df_cols(df,col_list,obj_cols=False):
         df[col] = df[col].astype('category')
 
 
-# In[6]:
+# In[12]:
 
 def save_to_hdfs(fpath,rst_col_idx=False,rst_row_idx=False,sht=0,pdate=False,append=True):
     raw_data = get_raw_data(fpath,rst_col_idx=rst_col_idx,rst_row_idx=rst_row_idx,sht=sht,pdate=pdate)
@@ -163,7 +163,7 @@ def save_to_hdfs(fpath,rst_col_idx=False,rst_row_idx=False,sht=0,pdate=False,app
     
 
 
-# In[1]:
+# In[13]:
 
 def str_to_numeric(df,cols,dtp,replace_strs):
     for col in cols:
@@ -172,14 +172,14 @@ def str_to_numeric(df,cols,dtp,replace_strs):
         df[col] = df[col].astype(dtp)
 
 
-# In[1]:
+# In[14]:
 
 def conv_cols_float(df,non_flt_cols):
     for col in non_flt_cols:
         df[col]=df[col].astype('float64')
 
 
-# In[6]:
+# In[15]:
 
 def frmt_data_dtime_float(df,date_cols,non_float_cols,set_idx=False,set_idx_col=None):
     if(date_cols):
@@ -191,7 +191,7 @@ def frmt_data_dtime_float(df,date_cols,non_float_cols,set_idx=False,set_idx_col=
         df.set_index(set_idx_col,drop=True,inplace=True)
 
 
-# In[5]:
+# In[16]:
 
 def convert_save_df_hdfs(df,dt_cols,non_flt_cols,hdfs_path,set_idx=False,set_idx_colname=None):
     frmt_data_dtime_float(df,dt_cols,non_flt_cols,set_idx,set_idx_colname)
@@ -200,9 +200,17 @@ def convert_save_df_hdfs(df,dt_cols,non_flt_cols,hdfs_path,set_idx=False,set_idx
     store.close()
 
 
-# In[1]:
+# In[17]:
 
 def get_df_mb(df):
     # Return size in MB of df in memory
     return(df.memory_usage().sum()*1e-6)
+
+
+# In[18]:
+
+def save_df_to_hdfs(df,hdfs_path):
+    store = pd.HDFStore(hdfs_path,format='table',mode='w')
+    store.append('table',df)
+    store.close()
 
